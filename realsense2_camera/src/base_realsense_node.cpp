@@ -1768,7 +1768,7 @@ void BaseRealSenseNode::SetBaseStream()
     std::map<stream_index_pair, rs2::stream_profile> available_profiles;
     for(auto&& sensor : _available_ros_sensors)
     {
-        for (auto& profile : sensor->getSensor().get_stream_profiles())
+        for (auto& profile : sensor->get_stream_profiles())
         {
             stream_index_pair sip(profile.stream_type(), profile.stream_index());
             if (available_profiles.find(sip) != available_profiles.end())
