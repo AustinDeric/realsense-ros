@@ -188,6 +188,7 @@ void BaseRealSenseNode::setupErrorCallback()
 void BaseRealSenseNode::publishTopics()
 {
     getParameters();
+    setupFilters();
     setup();
     // setupDevice();
     setupFilters();
@@ -1064,7 +1065,7 @@ cv::Mat& BaseRealSenseNode::fix_depth_scale(const cv::Mat& from_image, cv::Mat& 
         to_image.create(from_image.rows, from_image.cols, from_image.type());
     }
 
-    CV_Assert(from_image.depth() == _image_format[RS2_STREAM_DEPTH]);
+    CV_Assert(from_image.depth() == _image_format[2]);
 
     int nRows = from_image.rows;
     int nCols = from_image.cols;
