@@ -88,7 +88,6 @@ find_package(ament_cmake REQUIRED)
 find_package(builtin_interfaces REQUIRED)
 find_package(cv_bridge REQUIRED)
 find_package(image_transport REQUIRED)
-#find_package(librealsense2 REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(rclcpp_components REQUIRED)
 find_package(realsense_camera_msgs REQUIRED)
@@ -99,27 +98,37 @@ find_package(nav_msgs REQUIRED)
 find_package(tf2_ros REQUIRED)
 find_package(tf2 REQUIRED)
 find_package(diagnostic_updater REQUIRED)
-
 find_package(realsense2 2.38.1)
+
 if(NOT realsense2_FOUND)
     message(FATAL_ERROR "\n\n Intel RealSense SDK 2.0 is missing, please install it from https://github.com/IntelRealSense/librealsense/releases\n\n")
 endif()
 
-#set(CMAKE_NO_SYSTEM_FROM_IMPORTED true)
-include_directories(
-    include
-    ${realsense2_INCLUDE_DIR}
-    )
+set(include_dirs
+  include
+  ${realsense2_INCLUDE_DIR}
+)
+
+set(dependencies
+  cv_bridge
+  image_transport
+  rclcpp
+  rclcpp_components
+  realsense_camera_msgs
+  std_msgs
+  sensor_msgs
+  nav_msgs
+  tf2_ros
+  tf2
+  diagnostic_updater
+  realsense2
+)
+
+include_directories(${include_dirs})
 
 set(node_plugins "")
 
 add_library(${PROJECT_NAME} SHARED
-    include/constants.h
-    include/realsense_node_factory.h
-    include/base_realsense_node.h
-    include/ros_sensor.h
-    include/ros_utils.h
-#    include/t265_realsense_node.h
     src/realsense_node_factory.cpp
     src/base_realsense_node.cpp
     src/parameters.cpp
@@ -129,27 +138,13 @@ add_library(${PROJECT_NAME} SHARED
     src/ros_imu_sensor.cpp
     src/ros_utils.cpp
 #    src/t265_realsense_node.cpp
-    )
-
+)
 
 target_link_libraries(${PROJECT_NAME}
     ${realsense2_LIBRARY}
-    )
-
-ament_target_dependencies(${PROJECT_NAME}
-  cv_bridge
-  image_transport
-  realsense2
-  rclcpp
-  rclcpp_components
-  realsense_camera_msgs
-  std_msgs
-  sensor_msgs
-  diagnostic_msgs
-  nav_msgs
-  tf2
-  tf2_ros
 )
+
+ament_target_dependencies(${PROJECT_NAME} ${dependencies})
 
 rclcpp_components_register_nodes(${PROJECT_NAME} "realsense2_camera::RealSenseNodeFactory")
 set(node_plugins "${node_plugins}realsense2_camera::RealSenseNodeFactory;$<TARGET_FILE:${PROJECT_NAME}>\n")
@@ -196,7 +191,8 @@ if(BUILD_TESTING)
   endif()
 endif()
 
-ament_export_include_directories(include)
+ament_export_include_directories(${include_dirs})
 ament_export_libraries(${PROJECT_NAME})
+ament_export_dependencies(${dependencies})
 
 ament_package()

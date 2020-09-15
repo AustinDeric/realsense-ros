@@ -35,7 +35,7 @@
 #include <eigen3/Eigen/Geometry>
 #include <condition_variable>
 
-#include <ros_sensor.h>
+#include <realsense2_camera/ros_sensor.h>
 
 #include <queue>
 #include <mutex>
