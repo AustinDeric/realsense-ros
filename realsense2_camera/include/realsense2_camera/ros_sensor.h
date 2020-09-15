@@ -3,7 +3,7 @@
 #include "constants.h"
 #include <map>
 #include <rclcpp/rclcpp.hpp>
-#include <ros_utils.h>
+#include <realsense2_camera/ros_utils.h>
 
 #define STREAM_NAME(sip) (static_cast<std::ostringstream&&>(std::ostringstream() << create_graph_resource_name(rs2_stream_to_string(sip.first)) << ((sip.second>0) ? std::to_string(sip.second) : ""))).str()
 

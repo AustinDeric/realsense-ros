@@ -1,5 +1,4 @@
-#include "../include/t265_realsense_node.h"
-#include <fstream>
+#include "realsense2_camera/t265_realsense_node.h"
 
 using namespace realsense2_camera;
 

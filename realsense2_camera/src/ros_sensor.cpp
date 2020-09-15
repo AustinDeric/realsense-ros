@@ -1,4 +1,4 @@
-#include <ros_sensor.h>
+#include <realsense2_camera/ros_sensor.h>
 
 using namespace realsense2_camera;
 using namespace rs2;

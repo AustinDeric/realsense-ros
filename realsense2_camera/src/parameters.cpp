@@ -1,5 +1,5 @@
-#include "../include/base_realsense_node.h"
-#include <ros_utils.h>
+#include "realsense2_camera/base_realsense_node.h"
+#include <realsense2_camera/ros_utils.h>
 
 using namespace realsense2_camera;
 
