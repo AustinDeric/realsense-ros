@@ -88,7 +88,6 @@ find_package(ament_cmake REQUIRED)
 find_package(builtin_interfaces REQUIRED)
 find_package(cv_bridge REQUIRED)
 find_package(image_transport REQUIRED)
-#find_package(librealsense2 REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(rclcpp_components REQUIRED)
 find_package(realsense_camera_msgs REQUIRED)
@@ -109,26 +108,17 @@ endif()
 include_directories(
     include
     ${realsense2_INCLUDE_DIR}
-    )
+)
 
 set(node_plugins "")
 
 add_library(${PROJECT_NAME} SHARED
-    include/constants.h
-    include/realsense_node_factory.h
-    include/base_realsense_node.h
-    include/t265_realsense_node.h
     src/realsense_node_factory.cpp
     src/base_realsense_node.cpp
     src/t265_realsense_node.cpp
-    )
+)
 
-
-target_link_libraries(${PROJECT_NAME}
-    ${realsense2_LIBRARY}
-    )
-
-ament_target_dependencies(${PROJECT_NAME}
+set(dependencies 
   cv_bridge
   image_transport
   realsense2
@@ -144,24 +134,9 @@ ament_target_dependencies(${PROJECT_NAME}
   realsense2
 )
 
-set(node_plugins "")
-
-set(executable_name realsense2_node)
-
-include_directories(include)
-
-add_library(${PROJECT_NAME} SHARED
-    src/realsense_node_factory.cpp
-    src/base_realsense_node.cpp
-    src/parameters.cpp
-    src/rs_node_setup.cpp
-    src/ros_sensor.cpp
-    src/ros_video_sensor.cpp
-    src/ros_imu_sensor.cpp
-    src/ros_utils.cpp
-#    src/t265_realsense_node.cpp
+ament_target_dependencies(${PROJECT_NAME}
+  ${dependencies}
 )
-ament_target_dependencies(${PROJECT_NAME} ${dependencies})
 
 rclcpp_components_register_nodes(${PROJECT_NAME} "realsense2_camera::RealSenseNodeFactory")
 set(node_plugins "${node_plugins}realsense2_camera::RealSenseNodeFactory;$<TARGET_FILE:${PROJECT_NAME}>\n")
@@ -174,6 +149,7 @@ install(TARGETS ${PROJECT_NAME}
   RUNTIME DESTINATION bin
 )
 
+# Install headers
 install(
   DIRECTORY include/
   DESTINATION include
@@ -215,5 +191,6 @@ endif()
 # Ament exports
 ament_export_include_directories(include)
 ament_export_libraries(${PROJECT_NAME})
+ament_export_dependencies(${dependencies})
 
 ament_package()

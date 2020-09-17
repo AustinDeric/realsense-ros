@@ -3,7 +3,7 @@
 
 #include "realsense2_camera/realsense_node_factory.h"
 #include "realsense2_camera/base_realsense_node.h"
-// #include "realsense2_camera/t265_realsense_node.h"
+#include "realsense2_camera/t265_realsense_node.h"
 #include <iostream>
 #include <map>
 #include <mutex>

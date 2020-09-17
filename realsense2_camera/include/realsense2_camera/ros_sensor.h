@@ -1,6 +1,6 @@
 #include <librealsense2/rs.hpp>
 #include <librealsense2/rsutil.h>
-#include "constants.h"
+#include "realsense2_camera/constants.h"
 #include <map>
 #include <rclcpp/rclcpp.hpp>
 #include <realsense2_camera/ros_utils.h>
