@@ -68,14 +68,16 @@ find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(realsense2_camera REQUIRED)
 
-add_executable(realsense2_node
+set(executable_name realsense2_node)
+
+add_executable(${executable_name}
   src/realsense2_node.cpp
 )
-ament_target_dependencies(realsense2_node
+ament_target_dependencies(${executable_name}
   realsense2_camera
 )
 
-install(TARGETS realsense2_node
+install(TARGETS ${executable_name}
   DESTINATION lib/${PROJECT_NAME}
 )
 

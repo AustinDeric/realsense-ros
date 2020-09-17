@@ -140,8 +140,28 @@ ament_target_dependencies(${PROJECT_NAME}
   diagnostic_msgs
   nav_msgs
   tf2
-  tf2_ros
+  diagnostic_updater
+  realsense2
 )
+
+set(node_plugins "")
+
+set(executable_name realsense2_node)
+
+include_directories(include)
+
+add_library(${PROJECT_NAME} SHARED
+    src/realsense_node_factory.cpp
+    src/base_realsense_node.cpp
+    src/parameters.cpp
+    src/rs_node_setup.cpp
+    src/ros_sensor.cpp
+    src/ros_video_sensor.cpp
+    src/ros_imu_sensor.cpp
+    src/ros_utils.cpp
+#    src/t265_realsense_node.cpp
+)
+ament_target_dependencies(${PROJECT_NAME} ${dependencies})
 
 rclcpp_components_register_nodes(${PROJECT_NAME} "realsense2_camera::RealSenseNodeFactory")
 set(node_plugins "${node_plugins}realsense2_camera::RealSenseNodeFactory;$<TARGET_FILE:${PROJECT_NAME}>\n")
@@ -166,6 +186,7 @@ install(DIRECTORY
     DESTINATION share/${PROJECT_NAME}
     )
 
+# Test
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
   find_package(OpenCV REQUIRED)
@@ -191,6 +212,7 @@ if(BUILD_TESTING)
   endif()
 endif()
 
+# Ament exports
 ament_export_include_directories(include)
 ament_export_libraries(${PROJECT_NAME})
 
