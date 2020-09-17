@@ -124,9 +124,11 @@ set(dependencies
   realsense2
 )
 
-include_directories(${include_dirs})
-
 set(node_plugins "")
+
+set(executable_name realsense2_node)
+
+include_directories(include)
 
 add_library(${PROJECT_NAME} SHARED
     src/realsense_node_factory.cpp
@@ -139,11 +141,6 @@ add_library(${PROJECT_NAME} SHARED
     src/ros_utils.cpp
 #    src/t265_realsense_node.cpp
 )
-
-target_link_libraries(${PROJECT_NAME}
-    ${realsense2_LIBRARY}
-)
-
 ament_target_dependencies(${PROJECT_NAME} ${dependencies})
 
 rclcpp_components_register_nodes(${PROJECT_NAME} "realsense2_camera::RealSenseNodeFactory")
@@ -151,6 +148,7 @@ set(node_plugins "${node_plugins}realsense2_camera::RealSenseNodeFactory;$<TARGE
 
 # Install binaries
 install(TARGETS ${PROJECT_NAME}
+  DESTINATION lib/${PROJECT_NAME}
   ARCHIVE DESTINATION lib
   LIBRARY DESTINATION lib
   RUNTIME DESTINATION bin
@@ -162,10 +160,13 @@ install(
 )
 
 # Install launch files
-install(DIRECTORY launch/
-    DESTINATION launch
+install(DIRECTORY 
+    launch
+    config
+    DESTINATION share/${PROJECT_NAME}
     )
 
+# Test
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
   find_package(OpenCV REQUIRED)
@@ -191,7 +192,8 @@ if(BUILD_TESTING)
   endif()
 endif()
 
-ament_export_include_directories(${include_dirs})
+# Ament exports
+ament_export_include_directories(include)
 ament_export_libraries(${PROJECT_NAME})
 ament_export_dependencies(${dependencies})
 
